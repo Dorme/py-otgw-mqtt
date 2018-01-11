@@ -46,9 +46,7 @@ def on_mqtt_connect(client, userdata, flags, rc):
     # Subscribe to all topics in our namespace when we're connected. Send out
     # a message telling we're online
     log.info("Connected with result code "+str(rc))
-    #mqtt_client.subscribe("$SYS/#")
     mqtt_client.subscribe('{}/#'.format(settings['mqtt']['sub_topic_namespace']))
-    mqtt_client.subscribe('{}'.format(settings['mqtt']['sub_topic_namespace']))
     mqtt_client.publish(
         topic=opentherm.topic_namespace,
         payload="online",
@@ -57,7 +55,7 @@ def on_mqtt_connect(client, userdata, flags, rc):
 
 def on_mqtt_message(client, userdata, msg):
     # Handle incoming messages
-    log.info("Received message on topic {} with payload {}".format(
+    log.debug("Received message on topic {} with payload {}".format(
                 msg.topic, str(msg.payload)))
     command_generators={
         "set/otgw/room_setpoint/temporary": \
